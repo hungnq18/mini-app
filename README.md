@@ -58,86 +58,7 @@ npm run dev
 - **HR Dashboard**: http://localhost:3001
 - **Backend API**: http://localhost:5000
 - **API Health Check**: http://localhost:5000/api/health
-
-## 🔧 Cấu hình Zalo Mini App
-
-1. Đăng nhập [Zalo Developer Console](https://developers.zalo.me/)
-2. Tạo Mini App mới
-3. Cấu hình:
-   - **App ID**: `1396606563538150743`
-   - **Domain**: `http://localhost:2999`
-   - **Permissions**: `user.phone`, `user.info`
-4. Cập nhật `ZALO_APP_ID` trong `backend/config.env`
-
-### ZMP SDK Integration
-Ứng dụng sử dụng ZMP SDK chính thức để lấy số điện thoại:
-```javascript
-import { getPhoneNumber } from "zmp-sdk/apis";
-
-const phoneData = await getPhoneNumber();
-```
-
-## 📊 API Endpoints
-
-### Leads
-- `POST /api/leads` - Tạo lead mới
-- `GET /api/leads` - Lấy danh sách leads
-- `GET /api/leads/:id` - Lấy chi tiết lead
-- `PUT /api/leads/:id` - Cập nhật lead
-- `DELETE /api/leads/:id` - Xóa lead
-
-### Users
-- `POST /api/users` - Tạo user mới
-- `GET /api/users` - Lấy danh sách users
-- `GET /api/users/:id` - Lấy chi tiết user
-- `PUT /api/users/:id` - Cập nhật user
-
-### Auth
-- `POST /api/auth/login` - Đăng nhập
-- `POST /api/auth/register` - Đăng ký
-- `POST /api/auth/logout` - Đăng xuất
-
-### Zalo
-- `POST /api/zalo/user-info` - Xử lý thông tin Zalo
-
-## 🗄️ Database Schema
-
-### Lead Model
-```javascript
-{
-  name: String,
-  phone: String,
-  email: String,
-  birthYear: Number,
-  qualification: String,
-  country: String,
-  message: String,
-  zaloInfo: Object,
-  status: String,
-  priority: String,
-  assignedTo: ObjectId,
-  notes: Array,
-  convertedToUser: ObjectId,
-  additionalInfo: Object,
-  source: String,
-  ipAddress: String,
-  userAgent: String
-}
-```
-
-### User Model
-```javascript
-{
-  name: String,
-  email: String,
-  phone: String,
-  password: String,
-  role: String,
-  isActive: Boolean,
-  lastLogin: Date,
-  profile: Object
-}
-```
+`
 
 ## 🔒 Security Features
 
@@ -194,11 +115,7 @@ npm run preview      # Preview build
 - Zalo Mini App integration
 - Optimized performance
 
-## 📞 Support
 
-- **Email**: info@haiphong.com
-- **Phone**: 1900 1234
-- **Address**: Hải Phòng, Việt Nam
 
 ## 🙏 Acknowledgments
 
