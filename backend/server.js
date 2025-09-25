@@ -4,7 +4,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-require('dotenv').config({ path: './config.env' });
+require('dotenv').config();
 
 // Import database connection
 const connectDB = require('./config/database');
