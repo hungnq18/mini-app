@@ -1,32 +1,39 @@
-// API Configuration
+// API Configuration using environment variables
 const API_CONFIG = {
   // Development URLs
   development: {
-    baseURL: 'http://localhost:5000/api',
-    timeout: 10000
+    baseURL: import.meta.env.VITE_API_BASE_URL_DEV || 'http://localhost:5000/api',
+    timeout: parseInt(import.meta.env.VITE_API_TIMEOUT_DEV) || 10000
   },
   
   // Production URLs
   production: {
-    baseURL: 'https://your-production-domain.com/api',
-    timeout: 15000
+    baseURL: import.meta.env.VITE_API_BASE_URL_PROD || 'https://your-production-domain.com/api',
+    timeout: parseInt(import.meta.env.VITE_API_TIMEOUT_PROD) || 15000
   },
   
-  // Test environment URLs - CẬP NHẬT URL TEST CỦA BẠN
+  // Test environment URLs - Sử dụng link Zalo
   test: {
-    baseURL: 'https://your-test-domain.com/api', // THAY ĐỔI URL NÀY
-    timeout: 15000
+    baseURL: import.meta.env.VITE_API_BASE_URL_TEST || 'https://haiphong-backend.onrender.com/api',
+    timeout: parseInt(import.meta.env.VITE_API_TIMEOUT_TEST) || 15000
   },
   
-  // Zalo environment URLs - SỬ DỤNG URL TEST
+  // Zalo environment URLs - Sử dụng link Zalo
   zalo: {
-    baseURL: 'https://your-test-domain.com/api', // THAY ĐỔI URL NÀY
-    timeout: 15000
+    baseURL: import.meta.env.VITE_API_BASE_URL_ZALO || 'https://haiphong-backend.onrender.com/api',
+    timeout: parseInt(import.meta.env.VITE_API_TIMEOUT_ZALO) || 15000
   }
 };
 
 // Get current environment
 const getCurrentEnvironment = () => {
+  // Check if environment is set via environment variable
+  const envFromVar = import.meta.env.VITE_DEFAULT_ENVIRONMENT;
+  if (envFromVar && ['development', 'production', 'test', 'zalo'].includes(envFromVar)) {
+    console.log('Using environment from VITE_DEFAULT_ENVIRONMENT:', envFromVar);
+    return envFromVar;
+  }
+  
   if (typeof window === 'undefined') {
     return 'development';
   }
@@ -66,7 +73,15 @@ export const getApiConfig = () => {
   console.log('API Config:', {
     environment,
     baseURL: config.baseURL,
-    currentURL: typeof window !== 'undefined' ? window.location.href : 'N/A'
+    timeout: config.timeout,
+    currentURL: typeof window !== 'undefined' ? window.location.href : 'N/A',
+    envVars: {
+      VITE_API_BASE_URL_DEV: import.meta.env.VITE_API_BASE_URL_DEV,
+      VITE_API_BASE_URL_PROD: import.meta.env.VITE_API_BASE_URL_PROD,
+      VITE_API_BASE_URL_TEST: import.meta.env.VITE_API_BASE_URL_TEST,
+      VITE_API_BASE_URL_ZALO: import.meta.env.VITE_API_BASE_URL_ZALO,
+      VITE_DEFAULT_ENVIRONMENT: import.meta.env.VITE_DEFAULT_ENVIRONMENT
+    }
   });
   
   return config;
