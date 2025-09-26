@@ -4,11 +4,11 @@ import { defineConfig } from "vite";
 
 // Vite config for Vercel deployment (without ZMP plugin)
 export default defineConfig({
-  root: "./src",
+  root: ".",
   base: "/",
   plugins: [react()],
   build: {
-    outDir: "../dist",
+    outDir: "dist",
     assetsInlineLimit: 0,
     rollupOptions: {
       output: {
