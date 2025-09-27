@@ -54,6 +54,15 @@ const corsOptions = {
       'https://zalo.me',
       'https://*.zaloapp.com',
       'https://*.zalo.me',
+      'https://h5.zdn.vn',
+      'https://*.zdn.vn',
+      'https://h5.zadn.vn',
+      'https://*.zadn.vn',
+      'https://zmp.zalo.me',
+      'https://*.zmp.zalo.me',
+      'https://h5.zdn.vn/zapps/1396606563538150743',
+      'https://h5.zadn.vn/zapps/1396606563538150743',
+      'https://zalo.me/s/1396606563538150743',
       process.env.FRONTEND_URL
     ].filter(Boolean);
     
@@ -63,22 +72,70 @@ const corsOptions = {
         const pattern = allowedOrigin.replace('*', '.*');
         return new RegExp(pattern).test(origin);
       }
-      return allowedOrigin === origin;
+      // Exact match
+      if (allowedOrigin === origin) {
+        return true;
+      }
+      // Check if origin starts with allowed origin (for Zalo Mini App URLs)
+      if (origin.startsWith(allowedOrigin)) {
+        return true;
+      }
+      return false;
     });
     
     if (isAllowed) {
+      console.log('CORS allowed origin:', origin);
       callback(null, true);
     } else {
       console.log('CORS blocked origin:', origin);
+      console.log('Available allowed origins:', allowedOrigins);
       callback(new Error('Không được phép bởi CORS policy'));
     }
   },
   credentials: true,
   optionsSuccessStatus: 200,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
+  allowedHeaders: [
+    'Content-Type', 
+    'Authorization', 
+    'X-Requested-With', 
+    'Accept', 
+    'Origin',
+    'X-Zalo-App-Id',
+    'X-Zalo-Version',
+    'X-Zalo-Platform',
+    'User-Agent'
+  ],
+  exposedHeaders: ['X-Total-Count', 'X-Page-Count'],
+  maxAge: 86400 // 24 hours
 };
 app.use(cors(corsOptions));
+
+// Additional CORS handling for Zalo Mini App
+app.use((req, res, next) => {
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin, X-Zalo-App-Id, X-Zalo-Version, X-Zalo-Platform, User-Agent');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Max-Age', '86400');
+    return res.status(200).end();
+  }
+  
+  // Add CORS headers to all responses - FORCE ALLOW ZALO
+  const origin = req.headers.origin;
+  if (origin && (origin.includes('zadn.vn') || origin.includes('zalo'))) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Credentials', 'true');
+    console.log('CORS: Allowing Zalo origin:', origin);
+  } else {
+    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.header('Access-Control-Allow-Credentials', 'true');
+  }
+  
+  next();
+});
 
 // Body parser middleware
 app.use(express.json({ limit: '10mb' }));
@@ -106,7 +163,36 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     environment: process.env.NODE_ENV,
-    version: '1.0.0'
+    version: '1.0.1',
+    cors: 'updated'
+  });
+});
+
+// CORS test endpoint
+app.get('/api/cors-test', (req, res) => {
+  res.json({
+    success: true,
+    message: 'CORS test successful',
+    origin: req.headers.origin,
+    timestamp: new Date().toISOString(),
+    cors: 'updated'
+  });
+});
+
+// Zalo proxy endpoint to bypass CORS
+app.post('/api/zalo/proxy', (req, res) => {
+  // Force CORS headers for Zalo
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin, X-Zalo-App-Id, X-Zalo-Version, X-Zalo-Platform, User-Agent');
+  
+  res.json({
+    success: true,
+    message: 'Zalo proxy endpoint working',
+    origin: req.headers.origin,
+    timestamp: new Date().toISOString(),
+    cors: 'bypassed'
   });
 });
 
