@@ -18,6 +18,7 @@
     "login": "zmp login",
     "start": "zmp start",
     "dev": "zmp start",
+    "dev:vite": "vite",
     "deploy": "zmp deploy",
     "build": "vite build --config vite.config.vercel.js",
     "build:vercel": "vite build --config vite.config.vercel.js",

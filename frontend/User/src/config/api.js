@@ -8,19 +8,19 @@ const API_CONFIG = {
   
   // Production URLs
   production: {
-    baseURL: import.meta.env.VITE_API_BASE_URL_PROD || 'https://your-production-domain.com/api',
+    baseURL: import.meta.env.VITE_API_BASE_URL_PROD || 'https://mini-app-3rwr.onrender.com/api',
     timeout: parseInt(import.meta.env.VITE_API_TIMEOUT_PROD) || 15000
   },
   
-  // Test environment URLs - Sử dụng link Zalo
+  // Test environment URLs - Sử dụng link production
   test: {
-    baseURL: import.meta.env.VITE_API_BASE_URL_TEST || 'https://haiphong-backend.onrender.com/api',
+    baseURL: import.meta.env.VITE_API_BASE_URL_TEST || 'https://mini-app-3rwr.onrender.com/api',
     timeout: parseInt(import.meta.env.VITE_API_TIMEOUT_TEST) || 15000
   },
   
-  // Zalo environment URLs - Sử dụng link Zalo
+  // Zalo environment URLs - Sử dụng link production
   zalo: {
-    baseURL: import.meta.env.VITE_API_BASE_URL_ZALO || 'https://haiphong-backend.onrender.com/api',
+    baseURL: import.meta.env.VITE_API_BASE_URL_ZALO || 'https://mini-app-3rwr.onrender.com/api',
     timeout: parseInt(import.meta.env.VITE_API_TIMEOUT_ZALO) || 15000
   }
 };

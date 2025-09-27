@@ -30,7 +30,7 @@ const leadSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Bằng cấp là bắt buộc'],
     enum: {
-      values: ['high-school', 'college', 'bachelor', 'master', 'phd'],
+      values: ['high_school', 'college', 'university', 'postgraduate'],
       message: 'Bằng cấp không hợp lệ'
     }
   },

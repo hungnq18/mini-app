@@ -12,7 +12,7 @@ import "./css/tailwind.scss";
 import "./css/app.scss";
 
 // Expose app configuration
-import appConfig from "./app-config.json";
+import appConfig from "../app-config.json";
 if (!window.APP_CONFIG) {
   window.APP_CONFIG = appConfig;
 }
