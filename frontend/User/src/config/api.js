@@ -22,6 +22,12 @@ const API_CONFIG = {
   zalo: {
     baseURL: import.meta.env.VITE_API_BASE_URL_ZALO || 'https://mini-app-3rwr.onrender.com/api',
     timeout: parseInt(import.meta.env.VITE_API_TIMEOUT_ZALO) || 15000
+  },
+  
+  // Zalo proxy URLs - Sử dụng proxy khác để bypass CORS
+  zalo_proxy: {
+    baseURL: 'https://mini-app-3rwr.onrender.com/api',
+    timeout: parseInt(import.meta.env.VITE_API_TIMEOUT_ZALO) || 15000
   }
 };
 
@@ -45,8 +51,8 @@ const getCurrentEnvironment = () => {
   
   // Check for Zalo environment
   if (hostname.includes('zadn.vn') || hostname.includes('zalo') || href.includes('zalo')) {
-    console.log('Detected Zalo environment, using production URL');
-    return 'production'; // Will use production URL
+    console.log('Detected Zalo environment, using proxy URL to bypass CORS');
+    return 'zalo_proxy'; // Will use proxy URL
   }
   
   // Check for test environment

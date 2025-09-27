@@ -196,6 +196,21 @@ app.post('/api/zalo/proxy', (req, res) => {
   });
 });
 
+// Zalo JSONP endpoint for CORS bypass
+app.get('/api/zalo/jsonp', (req, res) => {
+  const callback = req.query.callback || 'callback';
+  const data = {
+    success: true,
+    message: 'Zalo JSONP endpoint working',
+    origin: req.headers.origin,
+    timestamp: new Date().toISOString(),
+    cors: 'jsonp'
+  };
+  
+  res.header('Content-Type', 'application/javascript');
+  res.send(`${callback}(${JSON.stringify(data)});`);
+});
+
 // Zalo health check endpoint
 app.get('/api/zalo/health', (req, res) => {
   res.json({
